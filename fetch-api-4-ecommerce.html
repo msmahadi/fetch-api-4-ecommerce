@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Product List</title>
+
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            max-width: 100%;
+        }
+
+        .product-item {
+            width: 100%;
+            /* max-height: 210px; */
+            background: #f0f0f0;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .product-item img {
+            width: 100%;
+            max-height: 15rem;
+            object-fit: cover;
+        }
+
+        h3 {
+            font-size: 16px;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 8px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="product-list" class="product-list"></div>
+
+    <script>
+        let productList = document.querySelector('#product-list');
+
+        let displayProduct = async () => {
+            productList.innerHTML = "";
+
+            let productFetch = await fetch("https://fakestoreapi.com/products");
+            let finalProduct = await productFetch.json();
+
+            finalProduct.forEach((product, i) => {
+                productList.innerHTML += `
+          <div class="product-item">
+            <img src="${product.image}" alt="${product.title}" class="thumbnail">
+            <h3 class="text-h3">${i + 1} - ${product.title}</h3>
+            <p class="price-text">$ ${product.price}</p>
+            <a href="fetch-api-4-ecommerce-detail.html?id=${product.id}" class="read-more">Read More</a>
+          </div>
+        `;
+            });
+        }
+        displayProduct();
+    </script>
+</body>
+
+</html>

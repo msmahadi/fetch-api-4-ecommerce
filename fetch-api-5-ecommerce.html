@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Product List</title>
+
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%;
+            max-width: 1280px;
+            margin: auto;
+        }
+
+        .product-item {
+            width: 100%;
+            background: #f0f0f0;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .product-item img {
+            width: 100%;
+            max-height: 15rem;
+            object-fit: cover;
+        }
+
+        h3 {
+            font-size: 16px;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 8px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .json-text-btn {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 4px 8px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .json-code-text {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="product-list" class="product-list"></div>
+
+    <script>
+        let productList = document.querySelector('#product-list');
+
+        // JSON ডেটা ফরম্যাট করার ফাংশন
+        const formatJsonText = (jsonObj) => {
+            return JSON.stringify(jsonObj, null, 2); // Proper indentation
+        };
+
+        let displayProduct = async () => {
+            productList.innerHTML = "";
+
+            let productFetch = await fetch("https://x8ki-letl-twmt.n7.xano.io/api:9nEWpU0Z/mshacks_copy_button_01");
+            let finalProduct = await productFetch.json();
+
+            finalProduct.forEach((product, i) => {
+                productList.innerHTML += `
+                    <div class="product-item">
+                        <img src="${product.Thumbnail_img_link}" alt="${product.Component_Title}" class="thumbnail">
+                        <h3 class="text-h3">${i + 1} - ${product.Component_Title}</h3>
+                        <p class="price-text">$ ${product.price}</p>
+                        <a class="json-text-btn" role="button" wb-data="copy-button">
+                            <p wb-data="text">Copy hello</p>
+                            <pre class="json-code-text" data-mahadi="json-text" wb-data="json">${formatJsonText(product.Json_code_text)}</pre>
+                        </a>
+                        <a href="fetch-api-5-ecommerce-detail.html?id=${product.id}" class="read-more">Read More</a>
+                    </div>
+                `;
+            });
+
+            // JSON কপি বাটনের ইভেন্ট লিসেনার যোগ করা
+            const copyButtons = document.querySelectorAll("[wb-data=copy-button]");
+
+            copyButtons.forEach((copyButton) => {
+                copyButton.addEventListener("click", (event) => {
+                    const buttonText = copyButton.querySelector('[wb-data="text"]');
+
+                    // Change button text to "Copying..."
+                    buttonText.textContent = "Copying...";
+
+                    // Get the JSON data from the pre tag
+                    const componentJson = copyButton.querySelector('[wb-data="json"]').textContent;
+
+                    // Create a temporary textarea element to hold the JSON data
+                    const tempTextArea = document.createElement("textarea");
+                    tempTextArea.value = componentJson;
+                    document.body.appendChild(tempTextArea);
+
+                    // Select the content of the textarea
+                    tempTextArea.select();
+                    tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+
+                    // Execute the copy command
+                    document.execCommand("copy");
+
+                    // Remove the temporary textarea
+                    document.body.removeChild(tempTextArea);
+
+                    // After copying is complete, change text back
+                    setTimeout(() => {
+                        buttonText.textContent = "Copy to Webflow";
+                    }, 1000);
+                });
+            });
+        };
+
+        displayProduct();
+    </script>
+</body>
+
+</html>

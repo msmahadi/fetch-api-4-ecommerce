@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Product Details</title>
+
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        .product-detail {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="product-detail" class="product-detail"></div>
+
+    <script>
+        // URL থেকে id প্যারামিটার বের করা
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        const displayProductDetails = async () => {
+            const productFetch = await fetch(`https://x8ki-letl-twmt.n7.xano.io/api:9nEWpU0Z/mshacks_copy_button_01/${productId}`);
+            const product = await productFetch.json();
+
+            document.getElementById('product-detail').innerHTML = `
+        <img src="${product.Thumbnail_img_link}" alt="${product.Component_Title}">
+        <h1>${product.Component_Title}</h1>
+        <p>${product.description}</p>
+        <p><strong>Price:</strong> $${product.price}</p>
+      `;
+        }
+
+        displayProductDetails();
+    </script>
+</body>
+
+</html>

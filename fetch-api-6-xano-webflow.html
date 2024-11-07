@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Template</title>
+    <style>
+        * {
+            font-family: sans-serif;
+        }
+
+        /* Card er style */
+        .card-mahadi-1 {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .json-text-btn {
+            display: block;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .json-text-btn p {
+            margin: 0;
+        }
+
+        .json-code-text {
+            display: none;
+            margin-top: 10px;
+            font-size: 0.9em;
+            background-color: #080808;
+            padding: 10px;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+
+        #card-container-xano-mahadi-1 {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Card template -->
+    <template id="card-template-xano-mahadi-1">
+        <div class="card-mahadi-1">
+            <h2 data-mahadi="my-name"></h2>
+            <h2 data-mahadi="my-name"></h2>
+            <a class="json-text-btn" role="button" wb-data="copy-button">
+                <p wb-data="text">Copy hello</p>
+                <p class="json-code-text" data-mahadi="json-text" wb-data="json"></p>
+            </a>
+        </div>
+    </template>
+
+    <!-- Container jekhane sob card append hobe -->
+    <div id="card-container-xano-mahadi-1"></div>
+
+    <script>
+        // Xano theke data fetch kora
+        async function fetchData() {
+            try {
+                const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:uKwmsLZk/fs_gs_webflow_2_table');
+                const data = await response.json();
+
+                const cardTemplate = document.getElementById('card-template-xano-mahadi-1');
+
+                // Sob item er upor loop chalano
+                data.forEach((item) => {
+                    const card = cardTemplate.content.cloneNode(true);
+
+                    // Attribute onujayi data set kora
+                    card.querySelectorAll("[data-mahadi]").forEach((element) => {
+                        const dataType = element.getAttribute("data-mahadi");
+
+                        if (dataType === "my-name") {
+                            element.textContent = item["user_name"];
+                        } else if (dataType === "json-text") {
+                            element.textContent = JSON.stringify(item["json_code_origin"], null, 2); // JSON text show korbe
+                        }
+                    });
+
+                    // Card ke container e append kora
+                    document.getElementById('card-container-xano-mahadi-1').appendChild(card);
+                });
+            } catch (error) {
+                console.error("Data fetch korte somossa hocche:", error);
+            }
+        }
+
+        // Function call kore data fetch kora
+        fetchData();
+    </script>
+
+
+    <!-- codesandbox copy button dmsmahdi start  -->
+    <script src="https://4tltny.csb.app/finsweet-mahadi-json-webflow-multiple-button-code.js"></script>
+    <!-- codesandbox copy button dmsmahdi end -->
+
+
+</body>
+
+
+</html>
